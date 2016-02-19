@@ -1,0 +1,52 @@
+#Stephanie Villegas Mendoza
+#19 de febrero de 2016
+munmex
+sociodemo<-munmex
+View(sociodemo)
+sociodemo$R_DEF1<-as.numeric(as.character(sociodemo$R_DEF))
+sociodemo$C_RES1<-as.numeric(as.character(sociodemo$C_RES))
+sociodemo$EDA1<-as.numeric(as.character(sociodemo$EDA))
+precod<- subset(sociodemo,((R_DEF1==0)&(C_RES1==1|C_RES1==3)&(EDA1>=15&EDA1<=98)), select=c(EDA1, SEX, HRSOCUP, CLASE2, CLASE1, CLASE3))
+View(precod)
+#HISTOGRAMA
+attach(precod)
+CLASE2V1<-table(CLASE2)
+hist(CLASE2)
+hist(CLASE2, main="Gráfica 1. Distribución de la población de 15 años y más, 2015",
+     xlab="Tipo de ocupada", ylab="Población (miles)",
+     xlim=c(1,4), ylim=c(0,200000), col=c("blue","black","snow"), border=T, pch=18)
+#Para guardar podemos dar en export, ya sea como PDF, imagen o al clipboard
+
+#Gráficos de pie
+sd1<-subset(sociodemo, CLASE2==1, select=c(EDA,SEX,HRSOCUP,CLASE2,CLASE1,CLASE3,EDA5C,IMSSISSSTE))
+View(sd1)
+frec<-table(sd1$IMSSISSSTE)
+frec
+help(pie)
+#labels le ponemos la etiqueta, debe ser vector
+pie(frec)
+#ponemos labels
+pie(frec,labels=c("Imss","Issste","Otra","No recibe","No especificado"))
+#main es para poner título
+pie(frec,labels=c("Imss","Issste","Otra","No recibe","No especificado"),main="Institución de atención médica")
+pie(frec,labels=c("Imss","Issste","Otra","No recibe","No especificado"),main="Institución de atención médica",col=c("green","red","blue","gray","yellow"))
+
+ #Gráficas de barras
+#sacamos la frecuencia de las variables que vamos a usar
+frec1<-table(sd1$EDA5C)
+barplot(frec1)
+barplot(frec1,main="Cinco grupos de edad")
+barplot(frec1,main="Cinco grupos de edad",col=c("green","red","blue","gray","yellow","brown"))
+#las etiquetas se pueden poner como names.arg
+barplot(frec1,main="Cinco grupos de edad",col=c("green","red","blue","gray","yellow","brown"),names.arg=c("menor","14 a 24","25 a 44","45 a 64","65 y más","n.e."))
+barplot(frec1,main="Cinco grupos de edad",col=c("green","red","blue","gray","yellow","brown"),names.arg=c("menor","14 a 24","25 a 44","45 a 64","65 y más","n.e."),ylim=c(0,85000))
+
+names(frec1)<-c("menor a 14","14-24","25-44","45-64","65+","na")
+barplot(frec1,main="Cinco grupos de edad",col=c("green","red","blue","gray","yellow","brown"))
+#xlab y ylab es para poner etiquetas a los ejes
+barplot(frec1,main="Cinco grupos de edad",col=c("green","red","blue","gray","yellow","brown"),xlab="Edad",ylab="Población",ylim=c(0,150000))
+
+memory.size(max=TRUE)#Para elegir la cantidad de memoria que queremos que R use
+help(memory.size)
+
+#la próxima clase vamos a ver Plot y cerramos lo de gráficas
