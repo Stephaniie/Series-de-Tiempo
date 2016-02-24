@@ -1,0 +1,59 @@
+#24 de febrero de 2016
+#Día de la bandera
+#Stephanie Villegas Mendoza
+##Base para trabajar: "Variables del cuestionario de ocupación y empleo I"
+#2015 Trimestre II
+#Me tocó el estado de SONORA
+library(foreign)
+coe1<-read.dbf("C:\\Users\\SALA-C20\\Desktop\\COE1T215.dbf")
+View(coe1)
+#Vamos a filtrar para el estado de SONORA, es el número 26
+sonora<-subset(coe1, coe1$ENT==26)
+View(sonora)
+#Pregunta 1: Pregunta 1 ¿Cuántas personas viven normalmente en esta
+#vivienda contando a los niños chiquitos y a los ancianos?
+sonora$P3L<-ordered(sonora$P3L,levels=c("01","02","03","04","05","06","07","08","09","10","11",99),labels=c("1 persona","2 a 5 personas","6 a 10 personas","11 a 15 personas","16 a 20 personas","21 a 30 personas","31 a 50 personas","51 a 100 personas","101 a 250 personas","251 a 500 personas","501 y más personas","No sabe"))
+is.numeric(sonora$PL3)
+tab1<-table(sonora$P3L)
+#Pregunta 5:La semana pasada, ¿... tuvo poco trabajo que hacer?
+sonora$P5<-ordered(sonora$P5,levels=c("1","2","3","9"),labels=c("Sí","No trabajó la semana pasada","No se encontró en esa situación","No sabe"))
+is.numeric(sonora$P5)
+tab2<-table(sonora$P5)
+#Pregunta 2E:¿Es...
+sonora$P2E<-ordered(sonora$P2E,levels=c("1","2","3","4","5","6","9"),labels=c("Una persona temporalmente ausente de su actividad u oficio?","pensionado o jubilado de su empleo?","estudiante?","una persona que se dedica a los quehaceres de su hogar?","una persona con alguna limitación física o mental que le impide trabajar por el resto de su vida?","Otra condición","No sabe"))
+is.numeric(sonora$P2E)
+tab3<-table(sonora$P2E)
+tab3
+#Para hacer el cruce
+#Pregunta 1:Ahora le voy a preguntar por la situación laboral
+#de …¿La semana pasada trabajó por lo menos una hora?
+sonora$P1<-ordered(sonora$P1,levels=c("1","2"),labels=c("Sí","No"))
+is.numeric(sonora$P1)
+tab4<-table(sonora$P1)
+tab4
+
+#Hacer tablas expandidas de las variables que etiquetaron con sexo
+y = xtabs(~ P3L + P1, sonora)
+View(y)
+#y es cruce de PL3 y P1
+tab5<-table(sonora$P1,sonora$P3L)
+View(tab5)
+#tab5 hace lo mismo que y, sólo es una forma distinta de hacerlo
+
+#Para hacer cruce de P5 y P1
+z = xtabs(~ P5 + P1, sonora)
+View(z)
+#z es cruce de P5 y P1
+tab6<-table(sonora$P1,sonora$P5)
+View(tab6)
+#tab6 hace lo mismo que z, sólo es una forma distinta de hacerlo
+
+#Para hacer cruce de P2E y P1
+w = xtabs(~ P2E + P1, sonora)
+View(w)
+#z es cruce de P5 y P1
+tab7<-table(sonora$P2E,sonora$P1)
+View(tab7)
+#tab7 hace lo mismo que w, sólo es una forma distinta de hacerlo
+
+#Fin del programa
