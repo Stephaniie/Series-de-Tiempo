@@ -1,0 +1,44 @@
+'5 marzo 2016
+Private Sub Calcular_Click()
+
+If ComboBox1 = "Exponencial" Then
+
+n = 0
+
+For i = 1 To Cells(2, 12)
+
+n = n + Cells(2 + i, 9)
+
+Next i
+
+Cells(5, 12) = n / Cells(2, 12)
+
+UserForm1.Hide
+
+MsgBox (" Hola " & TextBoxAlfa & ". El estimador es " & Int(n / Cells(2, 12)))
+
+Else
+
+If ComboBox1 = "Weibull con tau definida" Then
+
+n = 0
+
+For i = 1 To Cells(2, 12)
+
+n = n + Cells(2 + i, 9)
+
+Next i
+
+Cells(5, 13) = ((n ^ 0.5) / Cells(2, 12)) ^ (1 / 0.5)
+
+UserForm1.Hide
+
+MsgBox (" Hola " & TextBoxAlfa & ". El estimador es " & Int((n ^ (0.5)) / Cells(2, 12)) ^ (1 / 0.5))
+
+UserForm1.Hide
+
+End If
+
+End If
+
+End Sub
