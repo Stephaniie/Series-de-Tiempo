@@ -1,0 +1,47 @@
+#Lunes 7 de marzo de 2016
+AirPassengers
+help("AirPassengers")
+#Es una serie de tiempo mensual, en miles
+data("AirPassengers")
+#Para que funcione como serie de tiempo, no como valor
+panam<- (AirPassengers)
+#creamos una nueva variable, que será nuestra serie de tiempo
+class(panam)
+#Para ser serie de tiempo debemos tener start(),end() y frequency()
+start(panam);end(panam);frequency(panam)
+panam
+ts() #para declarar una base de datos como serie de tiempo
+plot(panam)#La forma más simple de graficar
+help(plot)
+plot(panam, ylab="Pasajeros (miles)", xlab="Años", main="Número de pasajeros aéreos en Estados Unidos, 1949-1960")
+plot(aggregate(panam)) #muestra una línea de tendencia, una línea suavizada
+layout(1:1) #divide la pantalla para que quepan dos gráficas juntas 1:número que queramos
+ppp<-ts(base1,start = c(1998,1),frequency = 4) #Así se declara una ST
+
+#EJERCICIO
+#1) Generar un Data Frame con la Tasa de Desocupación
+#Que inicia en el primer Trimestre del 2005
+#Tasa de deocupación 3.4, 4.8, 3.3, 5.6, 3.2, 2.9 , 1.9, 2.8, 6.0, 4.3, 2.2
+#2) Convertirla en serie de tiempo y graficar la ST y la tendencia
+#3)**Punto extra para librarla del segundo examen**
+#3)Obtener un pdf/jpg/tiff/png con las dos gráficas en una misma imagen
+#(con comandos de R)
+#Subir a Github antes de martes 8 marzo alas 11.59 hrs (medio día)...
+
+tasa_des1<-c(3.4,4.8,3.3,5.6,3.2,2.9,1.9,2.8,6.0,4.3,2.2,NA)
+matriz_des<-matrix(tasa_des,3,4,byrow=T)
+Años<-c(2005,2006,2007)
+col1<-matriz_des[,1]
+col2<-matriz_des[,2]
+col3<-matriz_des[,3]
+col4<-matriz_des[,4]
+data_des<-data.frame(T1=col1,T2=col2,T3=col3,T4=col4, row.names=Años)
+View(data_des)
+ST_des<-ts(tasa_des1,start=c(2005,1),frequency=4)
+pdf("comparativo.pdf")
+layout(1:2)
+plot(ST_des, ylab="Tasa de desocupación", xlab="Año", main="Tasa de desocupación trimestral")
+plot(aggregate(ST_des), ylab="Tasa de desocupación", xlab="Año", main="Tendencia de Tasa de desocupación trimestral")
+#Guarda el archivo en Mis documentos
+ #fin del programa
+
