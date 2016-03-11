@@ -1,0 +1,51 @@
+#11 de marzo de 2016
+#Stephanie 
+#Simulaciones
+#vamos a simular un indicador 
+#Para simular, necesitamos:
+#Valor máximo, mínimo y número de datos.
+
+#En este ejemplo vamos a proponer la población de México
+#Valor mínimo=100, máximo=120, 15 datos que inicie en 2000
+pob<- sample(100:120, 15, replace = F)
+#ahora vamos a convertir en ST
+pobts<- ts(pob, frequency = 1, start = (2000))
+plot(pobts, ylab= "Población", xlab= "Año", main= "Población de México")
+plot(aggregate(pobts),  ylab= "Población", xlab= "Año", main= "Población de México (tendencia)")
+#Tendencias: Para determinar la tendencia de una ST se utiliza la
+#función agreggate(), en la que se puede interpretar la tendencia
+#mediante la gráfica: Plot(agreggate())
+#El modelo más simple para una tendecia es aumento o disminución lineal.
+
+#Bajar de INEGI bases de datos
+ocu<-ts(read.csv(("C:/Users/SALA-C20/Desktop/ocupa.csv"), header = F), frequency = 4, start = 2005)
+plot(ocu)
+plot(ocu, ylab="Porcentaje", xlab="Año", main="Población ocupada relativa, Toluca")
+plot(aggregate(ocu), ylab="Porcentaje", xlab="Año", main="Población ocupada relativa (tendencia), Toluca")
+
+##EJERCICIO##
+#Simular tasa de desocupación, entre 3 y 8 %
+#Comienza en 2005, 40 datos, trimestral
+#Luego bajar de INEGI la verdadera tasa de desocupación
+#Importarla en R y comparar
+
+desocupados<- sample(3:8, 44, replace=T)
+desocuts<-ts(desocupados, frequency = 4, start= 2005)
+plot(desocuts)
+plot(desocuts, ylab= "Porcentaje", xlab="Año", main="Tasa de desocupación relativa (simulación), Toluca")
+plot((aggregate(desocuts)), ylab= "Porcentaje", xlab="Año", main="Tasa de desocupación, Toluca (tendencia)")
+
+desocu<-ts(read.csv(("C:/Users/SALA-C20/Desktop/desocu.csv"), header = F), frequency = 4, start = 2005)
+plot(desocu)
+plot(desocu, ylab="Porcentaje", xlab="Año", main="Población desocupada relativa -INEGI, Toluca")
+plot(aggregate(desocu), ylab="Porcentaje", xlab="Año", main="Población desocupada relativa (tendencia) -INEGI, Toluca")
+
+#FORMA1
+layout(1:2)
+plot(desocuts, ylab= "Porcentaje", xlab="Año", main="Tasa de desocupación relativa (simulación), Toluca")
+plot(desocu, ylab="Porcentaje", xlab="Año", main="Población desocupada relativa -INEGI, Toluca")
+#FORMA2
+plot(cbind(Simulación=desocuts, INEGI=desocu), main="Población desocupada relativa, simulación (arriba) e INEGI (abajo)", xlab="Año", col.lab="purple", col.main="dark blue", col="hot pink")
+#Gráfica toda bonita llena de colores
+
+#Fin del programa
