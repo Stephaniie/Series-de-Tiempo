@@ -1,0 +1,51 @@
+#14 de marzo de 2016
+#Stephanie Villegas Mendoza
+
+tasas3<-ts(read.csv(("C:/Users/SALA-C20/Desktop/3tasas.csv"), header = T), frequency = 4, start = 2005)
+View(tasas3)
+#No puede empezar una variable con un número (con algunos símbolos en general)
+#Se recomienda que siempre comience con una letra
+class(tasas3)
+desoparcial <- ts(tasas3[,1], start=2005, frequency=4)
+asala <- ts(tasas3[,2], start=2005, frequency=4)
+til1 <- ts(tasas3[,3], start=2005, frequency=4)
+#Estamos desagregando la serie de tiempo
+seriemultiple<- ts.intersect(desoparcial,asala,til1)
+#Estamos reagrupando las 3 variables o indicadores
+plot(seriemultiple, main="Serie de tiempo múltiple", xlab="Años", col="purple")
+
+#Si una de las series tiene un inicio distinto, la intersección de las series
+#Comienza en ese punto, no muestra toda la información
+
+#Para partir una serie de tiempo, usamos la función "Window"
+seriemultiple0509<-window(seriemultiple, start=c(2005,1), end=c(2009,4))
+seriemultiple0509
+seriemultiple1015<-window(seriemultiple, start=c(2010,1), end=c(2015,4))
+seriemultiple1015
+
+#Aquí partimos la serie de tiempo en dos
+plot(seriemultiple0509, main="Serie de tiempo múltiple", xlab="Años", col="blue")
+plot(seriemultiple1015, main="Serie de tiempo múltiple", xlab="Años", col="orange")
+start(seriemultiple); end(seriemultiple) #Consultar inicio y fin de la serie 
+
+##EJERCICIO##
+#Importar una serie de tiempo de un tema de interés
+#Tema: "Esperanza de vida en México, América Latina y Europa, 1961-2013."
+#Fuente: Banco Mundial
+
+#1)Importarlas y declarar la serie de tiempo múltiple, y las individuales
+espvida <- ts(read.csv(("C:/Users/SALA-C20/Desktop/espvida.csv"), header = T), frequency = 1, start = 1961)
+mex<-ts(espvida[,1],start=1961, frequency = 1)
+amelat<-ts(espvida[,2],start=1961, frequency = 1)
+europ<-ts(espvida[,3],start=1961, frequency = 1)
+#2)Grafica las variables, juntas y separadas
+plot(espvida, main="Esperanza de vida en México, América Latina y Europa, 1961-2013", xlab="Año")
+plot(mex, main="Esperanza de vida en México, 1961-2013", xlab="Año", ylab="Esperanza de vida", col="hot pink")
+plot(amelat, main="Esperanza de vida en América Latina y el Caribe, 1961-2013", xlab="Año", ylab="Esperanza de vida", col="dark blue")
+plot(europ, main="Esperanza de vida en Europa y Asia, 1961-2013", xlab="Año", ylab="Esperanza de vida", col="blueviolet")
+#3)Crear serie de tiempo múltiple
+esp_multiple<-ts.intersect(mex,amelat,europ)
+plot(esp_multiple, main="Esperanza de vida en México, América Latina y Europa, 1961-2013", xlab="Año", col="darkmagenta")
+
+#Fue trabajo individual. Stephanie Villegas Mendoza
+#Fin del programa
