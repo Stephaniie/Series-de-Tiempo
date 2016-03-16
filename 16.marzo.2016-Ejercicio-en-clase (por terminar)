@@ -1,0 +1,81 @@
+#16.marzo.2016}
+##TRABAJO EN CLASE DE SERIES DE TIEMPO CON SERGIO :
+  #### Generar 4 objetos con datos aleatorios y que tengan 60 datos
+  ### dato 1 de n?mero de profesionista (mill)rango de 5 a 8
+  ### dato 2 crec pib rango de 0 a 5
+  ### dato 3 porcentaje de ocupados rango de 40 a 60
+  ### dato 4 porcentaje de desocupados rango de 3 a 8
+  #### 1) una vez que generen los datos hacer un data frame de los 4 objetos
+  #### 2) mostrar en consola los primeros 12 y ultimos 12 datos
+  #### 3) convertir los objetos en series de tiempo desde el data frame comezando en 2010 y son datos mensuales
+  #### 4) graficar los profesionistas y ocupados en la misma imagen
+  #### 5) graficar pib y desocupados en la misma imagen
+  #### 6) graficar todas juntas
+### 7) creaR serie de tiempo multiple!!!!8
+#### 8 ) graficar serie de tiempo multiple 
+#### 9 ) dividir serie de tiempo y graficar solo el ultimo año...
+#### 10 ) analizar las graficas ( si hay alguna tendencia o variacion estacional) (investigar)
+
+profesionistas<- sample(5:8, 60, replace=T)
+crec_pib<- sample(0:5, 60, replace=T)
+ocupa<- sample(40:60, 60, replace=T)
+desocupa<- sample(3:8, 60, replace=T)
+
+#1) Creando una data frame que se llama data con las 4 variables
+data<- data.frame(profesionistas,crec_pib,ocupa,desocupa)
+View(data)
+
+#Guardando en variables separadas 
+primeros_doce<- data[1:12,]
+ultimos_doce<-data[49:60,]
+
+#Fusionando ambas data frames, con los primeros doce y los últimos doce
+#En un solo data frame
+#2) doces muestra las primeras y últimas 12 observaciones
+doces<- rbind(primeros_doce, ultimos_doce)
+doces
+
+#3) convertir los objetos en series de tiempo desde el data frame 
+#comezando en 2010 y son datos mensuales
+ts_prof<- ts(data[,1], start=2010, frequency = 12)
+ts_pib<- ts(data[,2], start=2010, frequency = 12)
+ts_ocu<- ts(data[,3], start=2010, frequency = 12)
+ts_desocu<- ts(data[,4], start=2010, frequency = 12)
+#Esta es la agregada
+ts_4<- ts.intersect(ts_prof,ts_pib, ts_ocu, ts_desocu)
+View(ts_4)
+
+#4) Graficar los profesionistas y ocupados en la misma imagen
+layout(1:2)
+plot(ts_prof, main="Número de profesionistas (millones)", xlab="Año", ylab="Número de profesionistas (en millones)", col="blue3")
+plot(ts_ocu, main="Porcentaje de ocupados", xlab="Año", ylab="Porcentaje de ocupados", col="red")
+
+#5) Graficar PIB y desocupados en la misma imagen
+layout(1:2)
+plot(ts_pib, main="Crecimiento del PIB", xlab="Año", ylab="Porcentaje", col="blue3")
+plot(ts_desocu, main="Porcentaje de desocupados", xlab="Año", ylab="Porcentaje de desocupados", col="red")
+
+#6)Graficar todas juntas
+# Uniendo las series individuales
+plot(cbind(Profesionistas=ts_prof, Crecimiento_PIB=ts_pib, Ocupados=ts_ocu, Desocupados=ts_desocu), main="Todas juntas", xlab="Año")
+
+#7)Crear serie de tiempo múltiple
+#Ya la había creado
+ts_4<- ts.intersect(ts_prof,ts_pib, ts_ocu, ts_desocu)
+View(ts_4)
+
+#8)Graficar la serie múltiple
+plot(ts_4, main="Todas juntas", xlab="Año")
+#No se cómo cambiar el nombre de las variables
+
+#9)Dividir serie de tiempo y graficar sólo el último año
+ts_lastyear<- window(ts_4, start=c(2014,1), end=c(2014,12))
+plot(ts_lastyear, main="Último año", xlab="Año")
+
+#10) analizar las graficas (si hay alguna tendencia o variacion estacional) 
+#(investigar)
+#En la gráfica de un años
+install.packages("season")
+??season
+plot(stl(ts_prof, s.window="periodic"))
+ #Aún no he terminado
