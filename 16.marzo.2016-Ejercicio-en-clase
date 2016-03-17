@@ -77,5 +77,16 @@ plot(ts_lastyear, main="Último año", xlab="Año")
 #En la gráfica de un años
 install.packages("season")
 ??season
+stl(ts_prof, s.window="periodic")
 plot(stl(ts_prof, s.window="periodic"))
- #Aún no he terminado
+#Con esta función se descompone una serie en componentes estacionales, 
+#de tendencia e irregulares, pero no entiendo por completo los resutlados.
+plot(aggregate(ts_4), main="Tendencia de las series", xlab="Año", col="orange")
+#Debido a que son datos aleatorios no podemos ver tendencias reales,
+#como se comportarían los datos de forma natural, por las tendencias
+#relacionadas con las temporadas vacacionales y que son de mayor o menor actividad
+#económica. Las tendencias en estos casos son más bien lineales, por año.
+#Esto es, siguen una tendencia alcista o bajista sostenida por año, con un cambio
+#a cada final de año.
+ 
+#Fin del programa
