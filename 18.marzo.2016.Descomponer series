@@ -1,0 +1,20 @@
+#18 de marzo de 2016
+
+desocupa<- sample(3:8, 60, replace=T)
+tdesoc<- ts(desocupa, start=2010, frequency = 12)
+plot(tdesoc)
+tdesoc.de<- decompose(tdesoc)
+names(tdesoc.de)
+plot(tdesoc.de)
+plot(decompose(tdesoc))
+Trend<- tdesoc.de$trend
+Season<- tdesoc.de$seasonal
+tdesoc.dem<-(decompose(tdesoc, type="mult"))
+plot(tdesoc.dem)
+
+#Probando otra función
+prueba<-stl(tdesoc, s.window="periodic")
+names(stl(tdesoc, s.window="periodic"))
+prueba
+?stl
+#fin del programa
