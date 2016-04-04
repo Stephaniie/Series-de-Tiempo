@@ -1,0 +1,146 @@
+#4 de abril de 2016
+#Stephanie Villegas Mendoza
+#Ahora bien, una vez que tenemos y conocemos la gráfica, 
+#para determinar con mayor precision
+#las tendencias y estacionalidad se utiliza la función 
+#"season plot" que está en la librería fpp
+install.packages ("fpp")
+require (fpp)
+
+netflix <- read.csv ("C:/Users/SALA-C20/Desktop/NETFLIX.csv", header = T)
+netflix_ts <- ts(netflix[,5], start = 2000, frequency = 12)
+plot(netflix_ts)
+ALSEA <- read.csv ("C:/Users/SALA-C20/Desktop/ALSEA.csv", header = T)
+ALSEA_ts <- ts(ALSEA[,5], start = 2000, frequency = 12)
+plot(ALSEA_ts)
+
+ica<-read.csv ("C:/Users/SALA-C20/Desktop/icatable.csv", header = T)
+ica_ts <- ts(ica[,5], start = 2000, frequency = 12)
+seasonplot(ica_ts,s= 12, year.labels=TRUE,
+           main="Valor acciones de ICA",
+           ylab="valor cierre",col=rainbow(12),year.labels.left=TRUE,pch=1:12)
+
+#con monthplot podemos hacer un análisis de la ST, dependiendo del periodo 
+#de los datos. Por ejemplo, si tenemos trimestral se pueden analizar 
+#los 4 trimestres en gráfica.
+
+monthplot(ica_ts,ylab="valor cierre",xlab="Month",
+          main="valor acciones ICA", col="blue")
+
+#Funciones utilizadas:
+ST graficas
+1) plot or plot.ts
+2) Gráfica de temporalidad: seasonplot
+3) Gráficas de subseries temporales: monthplot
+
+#CORRELACION Y COVARIANZA
+#Covarianza y correlación : medida del grado de la
+#relación lineal entre dos variables (x & y).
+
+#Auto covarianza y auto correlación:
+#Medida de la relación lineal entre los valores 
+#retardados de una series de tiempo
+
+#Se mide  la relación entre: y(t) and y(t−1)
+#y(t) and y(t−2)
+#y(t) and y(t−3), etc.
+
+#Para desestacionalizar y eliminar la tendencia,
+#necesitamos conocer la correlación de 
+#las variables para realizar mejores pronósticos de nuestra ST. 
+
+#En muchas casos las variables están correlacionadas... 
+#Entonces si nosotros logramos identificar la correlación,
+#podemos mejorar los pronósticos si las correlaciones son altas.
+#La correlación estructura en ST está determinada por la 
+#función de correlacion y se estima para la ST observada.
+
+#Autocorrelación
+#A veces sucede que los valores que toma una variable en el tiempo
+#no son independientes entre sí, sino que un valor determinado 
+#depende de los valores anteriores.
+#Para obtener la correlación, se necesita obtener primero la covarianza.
+
+#Covarianza 
+#La covarianza es una medida de asociación entre dos variables
+# Cov(x, y) = Suma de: (xi − x (media))(yi − y (media))/(n − 1)
+#Ejemplo en R
+ocu<-ts(read.csv(("/home/sgr/Dropbox/Dropbox1/fac economia/actuaria/series de tiempo/desoc, asal y til1.csv"), header = T),frequency=4, start=2005);
+asal <- ocu [,1]
+desoc <- ocu [,2]
+n<- length(asal)
+sum((asal) - mean(asal))*(desoc - mean(desoc))) / (n - 1) ## calculamos la covarianza  con formula
+
+ica_ts_2<- window(ica_ts, start=2000, end=c(2016,3))
+i=0
+if (i<195) {suma={((ica_ts_2[1]-mean(ica_ts_2))*(ALSEA_ts[1]-mean(ALSEA_ts)))} end if;
+suma
+
+cov(ica_ts_2, ALSEA_ts)
+cov(ica_ts_2, ALSEA_ts)/(sd(ica_ts_2)*sd(ALSEA_ts))
+#es igual a:
+cor(ica_ts_2, ALSEA_ts)
+cov(x, y) # Funcion de R para obtener la covarianza
+#La correlación también es una medida de relación entre dos variables que permite 
+
+#Cor(x, y) = Cov(x, y) \ sd(x)sd(y)
+
+cov(x,y) / (sd(x)*sd(y)) #calculamos la correlacion con formula
+
+cor(x,y) # funcion de R para obtener la correlacion 
+
+#################3la correlaci[on nos permite conocer si existe un problema para realizar 
+### el pronostico de nuestra St ]
+### una alta correlacion nos indica que al 
+
+Acf (beer, "type = correlation", plot = F)
+
+#EJERCICIO
+#1)Analizar los datos de las 3 empresas elegidas (seasonplot) y
+#elegir los 3 años que ubiquen con estacionalidad, ciclo o tendencia.
+#Interpretar esos 3 años.
+#2)Calcular con la fórmula y la función de covarianza y correlación
+#en la combinación de las 3 empresas, es decir,
+#Empresa1=x, Empresa2=y, Empresa3=z. Calcular la correlación de 
+#cor (x,y), cor(y,z), cor(x,z). Para hacerlas compatibles, utilizar window.
+
+#Mi serie más corta es Netflix, con 167 entradas, 
+#así que habrá que recortar las otras para igualarlas.
+
+ica_167<- window(ica_ts, start=2000, end=c(2013,11))
+alsea_167<-window(ALSEA_ts, start=2000, end=c(2013,11))
+ 
+#Y ahora ya son compatibles porque tienen el mismo número de observaciones.
+
+seasonplot(ica_167,s= 12, year.labels=TRUE,
+           main="Valor acciones de ICA",
+           ylab="valor cierre",col=rainbow(12),year.labels.left=TRUE,pch=1:12)
+#2008: Hay una tendencia a la baja de mayo a octubre
+#2007: Hay una tendencia general a la alza durante todo el año
+#No se observan patrones cíclicos ni estacionalidades
+
+seasonplot(alsea_167,s= 12, year.labels=TRUE,
+           main="Valor acciones de ALSEA",
+           ylab="valor cierre",col=rainbow(12),year.labels.left=TRUE,pch=1:12)
+#2006: Tiene una tendencia lenta al alza
+#2007: Tiene una caída importante de enero a febrero; cambio brusco
+
+seasonplot(netflix_ts,s= 12, year.labels=TRUE,
+           main="Valor acciones de NETFLIX",
+           ylab="valor cierre",col=rainbow(12),year.labels.left=TRUE,pch=1:12)
+#2008:Tiene una tendencia general al alza
+#2013: cambio abrupto (baja) de febrero a marzo, no se repite
+
+#Covarianza y correlación
+cov(alsea_167,ica_167) #80.3578
+cov(alsea_167, netflix_ts) #35.1633
+cov(netflix_ts, ica_167) #740.5427
+
+cor(alsea_167,ica_167) #0.3437
+cor(alsea_167, netflix_ts) #0.0202
+cor(netflix_ts, ica_167) #0.2767
+ 
+#No hay ninguna correlación claramente visible entre el
+#Valor de las acciones de las empresas.
+
+#fin del programa
