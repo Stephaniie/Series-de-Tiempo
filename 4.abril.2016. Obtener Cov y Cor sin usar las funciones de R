@@ -1,0 +1,37 @@
+#Cómo encontrar la covarianza y correlación
+#Con fórmula y con función
+#Stephanie Villegas
+
+a<-1:4
+b<-c(2,4,6,10)
+cor(a,b)
+cov(a,b)
+i=0
+suma<-0
+while (i<=((length(a)))) {suma=suma+sum((a[i]-mean(a))*(b[i]-mean(b))); i=i+1}
+covarianza<-suma/(length(a)-1)
+covarianza
+correlacion<-covarianza/(sd(a)*sd(b))
+correlacion
+
+apple <- read.csv ("C:/Users/Stephanie/Desktop/table_apple.csv", header = T)
+apple_ts <- ts(apple[,5], start = 2004, frequency = 12)
+plot(apple_ts)
+
+netflix<- read.csv ("C:/Users/Stephanie/Desktop/table_netflix.csv", header = T)
+netflix_ts <- ts(netflix[,5], start = 2002, frequency = 12)
+plot(netflix_ts)
+apple_49<-window(apple_ts, start=2004, end=c(2008,1))
+
+cov(apple_49,netflix_ts) #cov=1965703
+i=0
+suma<-0
+while (i<=((length(apple_49)))) {suma=suma+sum((apple_49[i]-mean(apple_49))*(netflix_ts[i]-mean(netflix_ts))); i=i+1}
+covarianza<-suma/(length(apple_49)-1)
+covarianza #cov=1965703
+
+cor(apple_49,netflix_ts) #cor=0.2241142
+correlacion<-covarianza/(sd(apple_49)*sd(netflix_ts))
+correlacion #cor=0.2241142
+
+#Fin del programa
