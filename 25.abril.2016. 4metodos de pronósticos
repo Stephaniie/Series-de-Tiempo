@@ -1,0 +1,23 @@
+#25 de abril de 2016
+install.packages("fpp")
+library(foreign)
+library(fpp)
+indicadores<-read.csv("enoe.csv", header=F)
+part<-indicadores[1,2:45]
+t(part)
+ts_part<-ts(t(part), start=2005, frequency=4)
+ts_part #esta es la serie de tiempo
+
+#Pronósticos con distintos métodos
+part1<-window(ts_part, start=2005, end=2010)
+partaj1<-meanf(part1, h=4)
+partaj2<-naive(part1, h=4)
+partaj3<-snaive(part1, h=4)
+
+plot(ts_part, main="Proyección tasas de desempleo trimestre", xlim=c(2005,2011))
+lines(partaj1$mean, col="red", lty=1)
+lines(partaj2$mean, col="green", lty=2)
+lines(partaj3$mean, col="blue", lty=3)
+legend("topleft", lty=1:3, col=c("red", "green", "blue"), legend=c("método media", "método ingenuo", "método ingenuo est."))
+help(legend)
+#Fin del programa
