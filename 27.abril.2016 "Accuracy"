@@ -1,0 +1,39 @@
+#27 de abril de 2016
+
+pib<-read.csv("pib.csv", header=T)
+View(pib)
+as.factor(pib$Dato)
+ts_pib<-ts(pib$Dato, start=1993, frequency = 4)
+View(ts_pib)
+
+plot(ts_pib)
+Acf(ts_pib)
+
+pibtspro<-meanf(ts_pib, 4) #media
+plot(pibtspro)
+pibtsnai<-naive(ts_pib, 4) #ingenuo
+plot(pibtsnai)
+pibtssnai<-snaive(ts_pib, 4) #ingenuo estacional
+plot(pibtssnai)
+pibtsder<-rwf(ts_pib, 4) #caminata aleatoria
+plot(pibtsder)
+
+evalmed<-accuracy(pibtspro) #evaluación media
+evaling<-accuracy(pibtsnai) #evaluación ingenuo
+evalsnai<-accuracy(pibtssnai)#evaluación ingenuo estacional
+evalder<-accuracy(pibtsder) #evaluación de caminata aleatoria o deriva
+
+help("accuracy")
+evalmed
+evaling
+evalsnai
+evalder
+errores<-rbind(evalmed,evaling, evalsnai, evalder)
+errores
+# ME: Mean error, RMSE: Root Mean Squared Error, MAE: Mean Absolute Error
+# MPE:Mean Percentage Error, MAPE: Mean Absolute Percentage Error
+# MASE: Mean Absoluto Scaled Error, ACF1: Autocorrelation of errors al lag 1.
+
+#Tarea: ¿Cómo usar decimales en series de tiempo?
+
+#Fin del programa
