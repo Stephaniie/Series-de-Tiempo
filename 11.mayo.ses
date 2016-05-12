@@ -1,0 +1,102 @@
+#Stephanie Villegas
+#modelo ingenuo; alfa del modelo de suavizamiento exponencial =1
+#0<alfa<1
+
+#librerias
+require(forecast)
+require(fpp)
+
+tdesoc<-read.csv("C:\\Users\\SALA-C19\\Desktop\\tasa desocupados.csv",header = F)
+desoc<-ts(tdesoc,start=2005, frequency=4)
+mod1<-ses(desoc,alpha=.2,initial="simple",h=4)
+mod2<-ses(desoc,alpha=.6,initial="simple",h=4)
+mod3<-ses(desoc,alpha=1,initial="simple",h=4)
+plot(mod1,plot.conf=FALSE, ylab="T DESOCUPADOS", xlab = "YEAR", main="", fcol= "white", type="o")
+#graficando ajustes
+lines(fitted(mod1),col="blue",type="o")
+lines(fitted(mod2),col="red",type="o")
+lines(fitted(mod3),col="green",type="o")
+#graficando la media del pronostico
+lines(mod1$mean,col="blue",type="o")
+lines(mod2$mean,col="red",type="o")
+lines(mod3$mean,col="green",type="o")
+legend("topleft",lty=5,col=c(1, "blue", "red", "green"),c("data",expression(alpha==0.2), expression(alpha==0.6),expression(alpha==1)),pch=1)
+
+
+#para extraer datos
+names(mod1)
+#guardarlos en objetos
+aju1<-mod1$fitted
+aju2<-mod2$fitted
+aju3<-mod3$fitted
+res1manual<-(desoc-aju1)
+res2manual<-(desoc-aju2)
+res3manual<-(desoc-aju3)
+res1<-mod1$residuals
+res2<-mod2$residuals
+res3<-mod3$residuals
+mod123<-data.frame(desoc,aju1,aju2,aju3,res1manual,res2manual,res3manual,res1,res2,res3)
+#comprobacion 
+ceros1<-res1manual-res1
+ceros2<-res2manual-res2
+ceros3<-res3manual-res3
+
+
+#ejercicio
+#elegir 2 series de tiempo sin tendencia ni estacionalidad
+#serie 1, apha=.1,.6,.9
+#serie2 aplha= .0001, .5 , .987
+#graficar series de tiempo
+#calcular MAE, RMSE, MAPE, SSE
+#DECIDIR QUE MODELO OCUPARIAMOS CON BASE EN LOS MAE, RMSE, MAPE, SSE
+#ARGUMENTAR POR QUE ES MEJOR UTILIZAR UN APLHA CERCANO A 0 O CERCANO A 1
+#SCRIPT GITHUB, ARGUMENTACION Y TABLA A WORD"
+
+
+
+
+bimbo<-read.csv("C:\\Users\\SALA-C19\\Desktop\\BIMBO.csv",header = T)
+femsa<-read.csv("C:\\Users\\SALA-C19\\Desktop\\FEMSA.csv",header = T)
+tbimbo<-ts(bimbo[,5],start=2000, frequency=12)
+tfemsa<-ts(femsa[,5],start=2000, frequency=12)
+mod1bimbo<-ses(tbimbo,alpha=.1,initial="simple",h=4)
+mod2bimbo<-ses(tbimbo,alpha=.6,initial="simple",h=4)
+mod3bimbo<-ses(tbimbo,alpha=.9,initial="simple",h=4)
+
+mod1femsa<-ses(tfemsa,alpha=.0001,initial="simple",h=4)
+mod2femsa<-ses(tfemsa,alpha=.5,initial="simple",h=4)
+mod3femsa<-ses(tfemsa,alpha=.987,initial="simple",h=4)
+
+#BIMBO GRAFICA Y AGUSTES
+plot(mod1bimbo,plot.conf=FALSE, ylab="PRECIO", xlab = "YEAR", main="CIERRE BIMBO", fcol= "white", type="o")
+lines(fitted(mod1bimbo),col="blue",type="o")
+lines(fitted(mod2bimbo),col="red",type="o")
+lines(fitted(mod3bimbo),col="green",type="o")
+legend("topleft",lty=5,col=c(1, "blue", "red", "green"),c("data",expression(alpha==0.1), expression(alpha==0.6),expression(alpha==9)),pch=1)
+
+#FEMSA GRAFICA Y AGUSTES
+plot(mod1femsa,plot.conf=FALSE, ylab="PRECIO", xlab = "MES", main="CIERRE FEMSA", fcol= "white", type="o")
+lines(fitted(mod1femsa),col="blue",type="o")
+lines(fitted(mod2femsa),col="red",type="o")
+lines(fitted(mod3femsa),col="green",type="o")
+legend("topleft",lty=5,col=c(1, "blue", "red", "green"),c("data",expression(alpha==0.0001), expression(alpha==0.5),expression(alpha==.987)),pch=1)
+
+
+#ANALISIS RESIDUOS
+evalmod1bimbo<-accuracy(mod1bimbo)
+evalmod2bimbo<-accuracy(mod2bimbo)
+evalmod3bimbo<-accuracy(mod3bimbo)
+#DATOS
+evalmod1bimbo
+evalmod2bimbo
+evalmod3bimbo
+
+
+#ANALISIS RESIDUOS
+evalmod1femsa<-accuracy(mod1femsa)
+evalmod2femsa<-accuracy(mod2femsa)
+evalmod3femsa<-accuracy(mod3femsa)
+#DATOS
+evalmod1femsa
+evalmod2femsa
+evalmod3femsa
