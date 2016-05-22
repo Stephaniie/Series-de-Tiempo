@@ -1,0 +1,59 @@
+#18 de mayo de 2016
+#Ejercicio en clase
+
+#Buscar 2 series de tiempo, una con tendencia en aumento y otra con tendencia a la baja.
+#La serie en aumento es: INPC, el Índice Nacional de Precios al Consumidor, mensualmente
+#La serie que decrece es: Mortalidad fetal por año.
+
+base_INPC<-read.csv("inpc.csv", header = T)
+inpc_st<-ts(base_INPC[,2], start=c(1985,11), frequency=12)
+plot(inpc_st, main="INPC 1985-2015", xlab="Año", ylab="INPC", sub="Fuente: INEGI", col="hot pink")
+inpc_wdw<-window(inpc_st, start=1986, end=2010)
+
+base_Mortf<-read.csv("mortf.csv", header = T)
+mortf_st<-ts(base_Mortf[,2], start=1989, frequency = 1)
+plot(mortf_st, main="Mortalidad fetal 1989-2014", xlab="Año", ylab="Mort. F.", sub="Fuente: INEGI", col="dark blue")
+mortf_wdw<-window(mortf_st, start=1989, end=2010)
+
+#Para la ST de INPC
+library(fpp)
+library(forecast)
+INPC_HLineal<-holt(inpc_wdw, alpha=0.3, beta=0.1, initial="simple", h=72)
+INPC_HExpon<-holt(inpc_wdw, alpha=0.3, beta=0.1, exponential=T , h=72)
+INPC_AA<-holt(inpc_wdw, damped = T, alpha=0.3, beta=0.1, gamma=0.5, h=72)
+INPC_MA<-holt(inpc_wdw, exponential=T, damped = T, alpha=0.3, beta=0.1, gamma=0.5, h=72)
+#Gráficas de los pronósticos por separado
+plot(INPC_HLineal)
+plot(INPC_HExpon)
+plot(INPC_AA)
+plot(INPC_MA)
+#Gráfica de los datos originales y los pronósticos en líneas
+plot(inpc_st, main="INPC 1985-2015", xlab="Año", ylab="INPC", sub="Fuente: INEGI", col="hot pink")
+lines((INPC_HLineal$mean), col="red", lty=2)
+lines((INPC_HExpon$mean), col="green", lty=3)
+lines((INPC_AA$mean), col="blue", lty=4)
+lines((INPC_MA$mean), col="gray", lty=5)
+metod=c("Data", "Holt Lineal","Holt exp.","Aditivo amort.","Multiplicativo Amort.")
+legend("topleft",lty=1:5, col=c("hot pink", "red", "green", "blue", "gray"), legend=metod, y.intersp=0.2)
+
+#Para la ST de Mortalidad Fetal
+mortf_HLineal<-holt(mortf_wdw, alpha=0.3, beta=0.1, initial="simple", h=4)
+mortf_HExpon<-holt(mortf_wdw, alpha=0.3, beta=0.1, exponential=T , h=4)
+mortf_AA<-holt(mortf_wdw, damped = T, alpha=0.3, beta=0.1, gamma=0.5, h=4)
+mortf_MA<-holt(mortf_wdw, exponential=T, damped = T, alpha=0.3, beta=0.1, gamma=0.5, h=4)
+
+#Gráficas de los pronósticos por separado
+plot(mortf_HLineal)
+plot(mortf_HExpon)
+plot(mortf_AA)
+plot(mortf_MA)
+#Gráfica de los datos originales y los pronósticos en líneas
+plot(mortf_st, main="Mortalidad fetal 1989-2014", xlab="Año", ylab="mortf", sub="Fuente: INEGI", col="hot pink", ylim=c(17000, 29000))
+lines((mortf_HLineal$mean), col="red", lty=2)
+lines((mortf_HExpon$mean), col="green", lty=3)
+lines((mortf_AA$mean), col="blue", lty=4)
+lines((mortf_MA$mean), col="gray", lty=5)
+legend("bottomleft",lty=1:5, col=c("hot pink", "red", "green", "blue", "gray"), legend=metod, y.intersp=0.2)
+metod=c("Data", "Holt Lineal","Holt exp.","Aditivo amort.","Multiplicativo Amort.")
+
+#Fin del programa
