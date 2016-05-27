@@ -1,0 +1,47 @@
+##Procedimiento para pronosticar modelos ARIMA
+# 1.Después de usar la función auto.arima
+# 2.Análisis de residuales (correlograma y prueba manteau test)
+# 3. si la prueba de residuales sugiere que hay ruido blanco, se procede a pronosticar.
+# Ejemplo:
+mod1<-auto.arima(deso, seasonal=F)
+forecast(mod1)
+
+#Ejercicio: 
+#1. Elijan una serie de tiempo
+#2. Apliquen la función auto.arima
+#3. Apliquen función Arima (p,d,q) con dos modelos diferente al que genere la función auto.arima
+#3.1 Generar los pronósticos de los 3 modelos
+#4. Generar una gráfica con los valores reales y los valores ajustados de los 3 modelos
+#5. Generar gráfica con los valores reales y los valores ajustados y pronosticados en los 3 modelos.
+#Número de pronósticos: 4
+
+base_INPC<-read.csv("inpc.csv", header=T)
+st_INPC<-ts(base_INPC[,2], start=c(1985,11), frequency=12)
+library(fpp)
+auto.INPC<-auto.arima(st_INPC, seasonal=F) 
+auto.INPC #Obtenemos un ARIMA(1,1,0) with drift
+auto.pro<-forecast(auto.INPC)
+plot(auto.pro)
+arima1<-Arima(st_INPC, order=c(0,1,2))
+pron1<-forecast(arima1)
+arima2<-Arima(st_INPC, order=c(1,2,0))
+pron2<-forecast(arima2)
+arima3<-Arima(st_INPC, order=c(3,1,0))
+pron3<-forecast(arima3)
+
+plot(st_INPC, ylab="INPC", xlab="Año", main="INPC: pronósticos", lty=1, col="hot pink", xlim=c(2014,2018), 
+     type="o", ylim=c(90, 140))
+lines(pron1$mean, col="red", lty=2, type="o")
+lines(pron2$mean, col="green", lty=3, type="o")
+lines(pron3$mean, col="blue", lty=4, type="o")
+lines(auto.pro$mean, col="gray", lty=5, type="o")
+
+lines(fitted(pron1), col="red", lty=2, type="o")
+lines(fitted(pron1), col="green", lty=3, type="o")
+lines(fitted(pron1), col="blue", lty=4, type="o")
+lines(fitted(pron1), col="gray", lty=5, type="o")
+
+metod=c("Data", "ARIMA(0,1,2)", "ARIMA(1,2,0)", "ARIMA(3,1,0)", "Auto ARIMA(1,1,0)")
+legend("topleft",lty=1:5, col=c("hot pink", "red", "green", "blue", "gray"), legend=metod, y.intersp=0.6)
+
+#Fin del programa
